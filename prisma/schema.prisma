@@ -9,3 +9,136 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// Here is prisma schema for my app. Database is postgresql. App is a goverment website. It has users. Users can create visa or residence permit applications and appoint visits.
+// that's what residence permit application looks like:
+// firstName: string;
+//   lastName: string;
+//   email: string;
+//   phoneNumber: string;
+//   birthDate: string;
+//   birthPlace: string;
+//   address: string;
+//   city: string;
+//   country: string;
+//   zipCode: string;
+//   residencePermitType: string;
+//   passportNumber: string;
+//   passportIssuingCountry: string;
+//   passportExpirationDate: string;
+//   passportIssuingDate: string;
+//   comments: string;
+
+// and that's what visa application looks like:
+//     name: "",
+//     surname: "",
+//     email: "",
+//     phone: "",
+//     address: "",
+//     city: "",
+//     state: "",
+//     zip: "",
+//     country: "",
+//     passportNumber: "",
+//     passportExpiration: "",
+//     passportCountry: "",
+//     visaType: "",
+//     visaDuration: "",
+//     visaDate: "",
+//     comments: "",
+
+// and that's what visit looks like:
+// date: string;
+// time: string;
+// location: string;
+// description: string;
+
+// and that's what user looks like:
+//  id: number;
+//   name: string;
+//   surname: string;
+//   email: string;
+//   dateOfBirth: string;
+//   phoneNumber: string;
+//   address: string;
+//   city: string;
+//   country: string;
+//   zipCode: string;
+//   passportNumber: string;
+//   passportExpirationDate: string;
+//   passportIssuingCountry: string;
+//  password: string;
+
+model User {
+  id                          Int                          @id @default(autoincrement())
+  name                        String
+  surname                     String
+  email                       String                       @unique
+  dateOfBirth                 String
+  phoneNumber                 String
+  address                     String
+  city                        String
+  country                     String
+  zipCode                     String
+  passportNumber              String
+  passportExpirationDate      String
+  passportIssuingCountry      String
+  password                    String
+  residencePermitApplications ResidencePermitApplication[]
+  visaApplications            VisaApplication[]
+  visits                      Visit[]
+}
+
+model ResidencePermitApplication {
+  id                     Int    @id @default(autoincrement())
+  firstName              String
+  lastName               String
+  email                  String
+  phoneNumber            String
+  birthDate              String
+  birthPlace             String
+  address                String
+  city                   String
+  country                String
+  zipCode                String
+  residencePermitType    String
+  passportNumber         String
+  passportIssuingCountry String
+  passportExpirationDate String
+  passportIssuingDate    String
+  comments               String
+  userId                 Int
+  user                   User   @relation(fields: [userId], references: [id])
+}
+
+model VisaApplication {
+  id                 Int    @id @default(autoincrement())
+  name               String
+  surname            String
+  email              String
+  phone              String
+  address            String
+  city               String
+  state              String
+  zip                String
+  country            String
+  passportNumber     String
+  passportExpiration String
+  passportCountry    String
+  visaType           String
+  visaDuration       String
+  visaDate           String
+  comments           String
+  userId             Int
+  user               User   @relation(fields: [userId], references: [id])
+}
+
+model Visit {
+  id          Int    @id @default(autoincrement())
+  date        String
+  time        String
+  location    String
+  description String
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id])
+}
