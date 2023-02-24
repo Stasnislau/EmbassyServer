@@ -1,5 +1,3 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model users {
   id                          Int                          @id @default(autoincrement())
   name                        String
   surname                     String
@@ -24,15 +22,15 @@ model User {
   passportExpirationDate      String
   passportIssuingCountry      String
   password                    String
-  residencePermitApplications ResidencePermitApplication[]
-  visaApplications            VisaApplication[]
-  visits                      Visit[]
+  residencePermitApplications residencePermitApplications[]
+  visaApplications            visaApplications[]
+  visits                      visits[]
 }
 
-model ResidencePermitApplication {
+model residencePermitApplications {
   id                     Int    @id @default(autoincrement())
-  name              String
-  surname               String
+  name                   String
+  surname                String
   email                  String
   phoneNumber            String
   birthDate              String
@@ -48,10 +46,10 @@ model ResidencePermitApplication {
   passportIssuingDate    String
   comments               String
   userId                 Int
-  user                   User   @relation(fields: [userId], references: [id])
+  user                   users   @relation(fields: [userId], references: [id])
 }
 
-model VisaApplication {
+model visaApplications {
   id                 Int    @id @default(autoincrement())
   name               String
   surname            String
@@ -70,15 +68,15 @@ model VisaApplication {
   visaDate           String
   comments           String
   userId             Int
-  user               User   @relation(fields: [userId], references: [id])
+  user               users   @relation(fields: [userId], references: [id])
 }
 
-model Visit {
+model visits {
   id          Int    @id @default(autoincrement())
   date        String
   time        String
   location    String
   description String
   userId      Int
-  user        User   @relation(fields: [userId], references: [id])
+  user        users   @relation(fields: [userId], references: [id])
 }
