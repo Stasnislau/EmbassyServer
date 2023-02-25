@@ -11,10 +11,101 @@ app.listen(3001, () => {
 });
 
 app.post("/users", async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const {
+    name,
+    surname,
+    email,
+    dateOfBirth,
+    phoneNumber,
+    address,
+    city,
+    country,
+    zipCode,
+    passportNumber,
+    passportExpirationDate,
+    passportIssuingCountry,
+    password,
+  } = req.body;
   const user = await prisma.user.create({
     data: {
-      name,
+      name: name,
+      surname: surname,
+      email: email,
+      dateOfBirth: dateOfBirth,
+      phoneNumber: phoneNumber,
+      address: address,
+      city: city,
+      country: country,
+      zipCode: zipCode,
+      passportNumber: passportNumber,
+      passportExpirationDate: passportExpirationDate,
+      passportIssuingCountry: passportIssuingCountry,
+      password: password,
+    },
+  });
+  res.json(user);
+});
+
+app.get("/users", async (req: Request, res: Response) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
+
+app.get("/users/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await prisma.user.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  res.json(user);
+});
+
+app.put("/users/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const {
+    name,
+    surname,
+    email,
+    dateOfBirth,
+    phoneNumber,
+    address,
+    city,
+    country,
+    zipCode,
+    passportNumber,
+    passportExpirationDate,
+    passportIssuingCountry,
+    password,
+  } = req.body;
+  const user = await prisma.user.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      name: name,
+      surname: surname,
+      email: email,
+      dateOfBirth: dateOfBirth,
+      phoneNumber: phoneNumber,
+      address: address,
+      city: city,
+      country: country,
+      zipCode: zipCode,
+      passportNumber: passportNumber,
+      passportExpirationDate: passportExpirationDate,
+      passportIssuingCountry: passportIssuingCountry,
+      password: password,
+    },
+  });
+  res.json(user);
+});
+
+app.delete("/users/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await prisma.user.delete({
+    where: {
+      id: Number(id),
     },
   });
   res.json(user);
