@@ -26,7 +26,7 @@ app.post("/users", async (req: Request, res: Response) => {
     passportIssuingCountry,
     password,
   } = req.body;
-  const user = await prisma.user.create({
+  const user = await prisma.users.create({
     data: {
       name: name,
       surname: surname,
@@ -47,13 +47,13 @@ app.post("/users", async (req: Request, res: Response) => {
 });
 
 app.get("/users", async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany();
+  const users = await prisma.users.findMany();
   res.json(users);
 });
 
 app.get("/users/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: {
       id: Number(id),
     },
@@ -78,7 +78,7 @@ app.put("/users/:id", async (req: Request, res: Response) => {
     passportIssuingCountry,
     password,
   } = req.body;
-  const user = await prisma.user.update({
+  const user = await prisma.users.update({
     where: {
       id: Number(id),
     },
@@ -103,7 +103,7 @@ app.put("/users/:id", async (req: Request, res: Response) => {
 
 app.delete("/users/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await prisma.user.delete({
+  const user = await prisma.users.delete({
     where: {
       id: Number(id),
     },
