@@ -55,10 +55,9 @@ model visaApplications {
   name                   String
   surname                String
   email                  String
-  phone                  String
+  phoneNumber            String
   address                String
   city                   String
-  state                  String
   zip                    String
   country                String
   passportNumber         String
