@@ -47,28 +47,30 @@ model residencePermitApplications {
   comments               String
   userId                 Int
   user                   users  @relation(fields: [userId], references: [id])
+  status                 String
 }
 
 model visaApplications {
-  id                 Int    @id @default(autoincrement())
-  name               String
-  surname            String
-  email              String
-  phone              String
-  address            String
-  city               String
-  state              String
-  zip                String
-  country            String
-  passportNumber     String
-  passportExpiration String
-  passportCountry    String
-  visaType           String
-  visaDuration       String
-  visaDate           String
-  comments           String
-  userId             Int
-  user               users  @relation(fields: [userId], references: [id])
+  id                     Int    @id @default(autoincrement())
+  name                   String
+  surname                String
+  email                  String
+  phone                  String
+  address                String
+  city                   String
+  state                  String
+  zip                    String
+  country                String
+  passportNumber         String
+  passportExpirationDate String
+  passportIssuingCountry String
+  visaType               String
+  visaDuration           String
+  visaDate               String
+  comments               String
+  userId                 Int
+  user                   users  @relation(fields: [userId], references: [id])
+  status                 String
 }
 
 model visits {
