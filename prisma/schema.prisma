@@ -8,10 +8,10 @@ datasource db {
 }
 
 model users {
-  id                          Int                          @id @default(autoincrement())
+  id                          Int                           @id @default(autoincrement())
   name                        String
   surname                     String
-  email                       String                       @unique
+  email                       String                        @unique
   dateOfBirth                 String
   phoneNumber                 String
   address                     String
@@ -21,10 +21,10 @@ model users {
   passportNumber              String
   passportExpirationDate      String
   passportIssuingCountry      String
-  password                    String
   residencePermitApplications residencePermitApplications[]
   visaApplications            visaApplications[]
   visits                      visits[]
+  credentials                 credentials[]
 }
 
 model residencePermitApplications {
@@ -46,7 +46,7 @@ model residencePermitApplications {
   passportIssuingDate    String
   comments               String
   userId                 Int
-  user                   users   @relation(fields: [userId], references: [id])
+  user                   users  @relation(fields: [userId], references: [id])
 }
 
 model visaApplications {
@@ -68,7 +68,7 @@ model visaApplications {
   visaDate           String
   comments           String
   userId             Int
-  user               users   @relation(fields: [userId], references: [id])
+  user               users  @relation(fields: [userId], references: [id])
 }
 
 model visits {
@@ -78,5 +78,13 @@ model visits {
   location    String
   description String
   userId      Int
-  user        users   @relation(fields: [userId], references: [id])
+  user        users  @relation(fields: [userId], references: [id])
+}
+
+model credentials {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  userId   Int
+  user     users  @relation(fields: [userId], references: [id])
 }

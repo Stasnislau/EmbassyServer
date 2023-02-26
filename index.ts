@@ -24,7 +24,6 @@ app.post("/users", async (req: Request, res: Response) => {
     passportNumber,
     passportExpirationDate,
     passportIssuingCountry,
-    password,
   } = req.body;
   const user = await prisma.users.create({
     data: {
@@ -40,7 +39,6 @@ app.post("/users", async (req: Request, res: Response) => {
       passportNumber: passportNumber,
       passportExpirationDate: passportExpirationDate,
       passportIssuingCountry: passportIssuingCountry,
-      password: password,
     },
   });
   res.json(user);
@@ -76,7 +74,6 @@ app.put("/users/:id", async (req: Request, res: Response) => {
     passportNumber,
     passportExpirationDate,
     passportIssuingCountry,
-    password,
   } = req.body;
   const user = await prisma.users.update({
     where: {
@@ -95,17 +92,28 @@ app.put("/users/:id", async (req: Request, res: Response) => {
       passportNumber: passportNumber,
       passportExpirationDate: passportExpirationDate,
       passportIssuingCountry: passportIssuingCountry,
-      password: password,
     },
   });
   res.json(user);
 });
 
-app.delete("/users/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await prisma.users.delete({
+
+app.get("/credentials:email", async (req: Request, res: Response) => {
+  const email = req.params.email;
+  const user = await prisma.users.findUnique({
     where: {
-      id: Number(id),
+      email: email,
+    },
+  });
+  res.json(user);
+});
+
+app.post("/credentials", async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  const user = await prisma.users.create({
+    data: {
+      email: email,
+      password: password,
     },
   });
   res.json(user);
