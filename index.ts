@@ -2,6 +2,26 @@ import express, { Request, Response } from "express";
 
 import { PrismaClient } from "@prisma/client";
 
+interface VisaApplicationInterface {
+  name: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  city: string;
+  zip: string;
+  country: string;
+  passportNumber: string;
+  passportExpirationDate: string;
+  passportIssuingCountry: string;
+  visaType: string;
+  visaDuration: string;
+  visaDate: string;
+  comments: string;
+  userId: number;
+  status: string;
+}
+
 const app = express();
 app.use(express.json());
 const prisma = new PrismaClient();
@@ -97,7 +117,6 @@ app.put("/users/:id", async (req: Request, res: Response) => {
   res.json(user);
 });
 
-
 app.get("/credentials:email", async (req: Request, res: Response) => {
   const email = req.params.email;
   const user = await prisma.users.findUnique({
@@ -110,11 +129,122 @@ app.get("/credentials:email", async (req: Request, res: Response) => {
 
 app.post("/credentials", async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await prisma.users.create({
+  const userCredentials = await prisma.credentials.create({
+    data: {
+      email: email,
+      password: password,
+      user: {
+        connect: {
+          email: email,
+        },
+      },
+    },
+  });
+  res.json(userCredentials);
+});
+
+app.put("/credentials/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { email, password } = req.body;
+  const userCredentials = await prisma.credentials.update({
+    where: {
+      id: Number(id),
+    },
     data: {
       email: email,
       password: password,
     },
   });
-  res.json(user);
+  res.json(userCredentials);
 });
+
+app.post("/visits:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const { date, time, location, description } = req.body;
+  const visit = await prisma.visits.create({
+    data: {
+      date: date,
+      time: time,
+      location: location,
+      description: description,
+      user: {
+        connect: {
+          id: Number(userId),
+        },
+      },
+    },
+  });
+  res.json(visit);
+});
+
+app.get("/visits:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const visits = await prisma.visits.findMany({
+    where: {
+      userId: Number(userId),
+    },
+  });
+  res.json(visits);
+});
+
+app.get("/visits/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const visit = await prisma.visits.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  res.json(visit);
+});
+
+app.post(
+  "/visa-applications:accountId",
+  async (req: Request, res: Response) => {
+    const accountId = req.params.accountId;
+    const {
+      name,
+      surname,
+      email,
+      phoneNumber,
+      address,
+      city,
+      zip,
+      country,
+      passportNumber,
+      passportExpirationDate,
+      passportIssuingCountry,
+      visaType,
+      visaDuration,
+      visaDate,
+      comments,
+      status,
+    } = req.body;
+    const visaApplication = await prisma.visaApplications.create({
+      data: {
+        name: name,
+        surname: surname,
+        email: email,
+        phoneNumber: phoneNumber,
+        address: address,
+        city: city,
+        zip: zip,
+        country: country,
+        passportNumber: passportNumber,
+        passportExpirationDate: passportExpirationDate,
+        passportIssuingCountry: passportIssuingCountry,
+        visaType: visaType,
+        visaDuration: visaDuration,
+        visaDate: visaDate,
+        comments: comments,
+        userId: Number(accountId),
+        status: status,
+        user: {
+          connect: {
+            id: Number(accountId),
+          },
+        },
+      } as VisaApplicationInterface,
+    });
+    res.json(visaApplication);
+  }
+);
