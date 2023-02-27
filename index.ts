@@ -248,3 +248,36 @@ app.post(
     res.json(visaApplication);
   }
 );
+
+app.get("/visa-applications:accountId", async (req: Request, res: Response) => {
+  const accountId = req.params.accountId;
+  const visaApplications = await prisma.visaApplications.findMany({
+    where: {
+      userId: Number(accountId),
+    },
+  });
+  res.json(visaApplications);
+});
+
+app.get("/visa-applications/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const visaApplication = await prisma.visaApplications.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  res.json(visaApplication);
+});
+
+app.get(
+  "/residence-applications:accountId",
+  async (req: Request, res: Response) => {
+    const accountId = req.params.accountId;
+    const residenceApplications = await prisma.residencePermitApplications.findMany({
+      where: {
+        userId: Number(accountId),
+      },
+    });
+    res.json(residenceApplications);
+  }
+);
