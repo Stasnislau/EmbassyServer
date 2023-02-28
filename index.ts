@@ -353,3 +353,14 @@ app.post("/residence-applications", async (req: Request, res: Response) => {
     } as residencePermitApplicationsInterface,
   });
 });
+
+app.get("/residence-applications/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const residenceApplication =
+    await prisma.residencePermitApplications.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+  res.json(residenceApplication);
+});
