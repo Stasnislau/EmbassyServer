@@ -22,6 +22,27 @@ interface VisaApplicationInterface {
   status: string;
 }
 
+interface residencePermitApplicationsInterface {
+  name: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+  birthDate: string;
+  birthPlace: string;
+  address: string;
+  city: string;
+  zip: string;
+  country: string;
+  residencePermitType: string;
+  passportNumber: string;
+  passportExpirationDate: string;
+  passportIssuingDate: string;
+  passportIssuingCountry: string;
+  comments: string;
+  userId: number;
+  status: string;
+}
+
 const app = express();
 app.use(express.json());
 const prisma = new PrismaClient();
@@ -273,11 +294,62 @@ app.get(
   "/residence-applications:accountId",
   async (req: Request, res: Response) => {
     const accountId = req.params.accountId;
-    const residenceApplications = await prisma.residencePermitApplications.findMany({
-      where: {
-        userId: Number(accountId),
-      },
-    });
+    const residenceApplications =
+      await prisma.residencePermitApplications.findMany({
+        where: {
+          userId: Number(accountId),
+        },
+      });
     res.json(residenceApplications);
   }
 );
+
+app.post("/residence-applications", async (req: Request, res: Response) => {
+  const {
+    name,
+    surname,
+    email,
+    phoneNumber,
+    birthDate,
+    birthPlace,
+    address,
+    city,
+    zip,
+    country,
+    residencePermitType,
+    passportNumber,
+    passportExpirationDate,
+    passportIssuingDate,
+    passportIssuingCountry,
+    comments,
+    userId,
+    status,
+  } = req.body;
+  const residenceApplication = await prisma.residencePermitApplications.create({
+    data: {
+      name: name,
+      surname: surname,
+      email: email,
+      phoneNumber: phoneNumber,
+      birthDate: birthDate,
+      birthPlace: birthPlace,
+      address: address,
+      city: city,
+      zip: zip,
+      country: country,
+      residencePermitType: residencePermitType,
+      passportNumber: passportNumber,
+      passportExpirationDate: passportExpirationDate,
+      passportIssuingDate: passportIssuingDate,
+      passportIssuingCountry: passportIssuingCountry,
+      comments: comments,
+      userId: Number(userId),
+      status: status,
+      user: {
+        connect: {
+          id: Number(userId),
+        },
+      },
+    } as residencePermitApplicationsInterface,
+  });
+});

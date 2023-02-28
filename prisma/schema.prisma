@@ -38,7 +38,7 @@ model residencePermitApplications {
   address                String
   city                   String
   country                String
-  zipCode                String
+  zip                    String
   residencePermitType    String
   passportNumber         String
   passportIssuingCountry String
