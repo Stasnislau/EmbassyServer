@@ -7,16 +7,19 @@ interface VisaApplicationInterface {
   surname: string;
   email: string;
   phoneNumber: string;
+  birthDate: string;
+  birthPlace: string;
   address: string;
   city: string;
   zip: string;
   country: string;
-  passportNumber: string;
-  passportExpirationDate: string;
-  passportIssuingCountry: string;
   visaType: string;
   visaDuration: string;
   visaDate: string;
+  passportNumber: string;
+  passportExpirationDate: string;
+  passportIssuingDate: string;
+  passportIssuingCountry: string;
   comments: string;
   userId: number;
   status: string;
@@ -43,6 +46,36 @@ interface residencePermitApplicationsInterface {
   status: string;
 }
 
+interface UserInterface {
+  name: string;
+  surname: string;
+  email: string;
+  dateOfBirth: string;
+  birthPlace: string;
+  phoneNumber: string;
+  address: string;
+  city: string;
+  country: string;
+  zip: string;
+  passportNumber: string;
+  passportExpirationDate: string;
+  passportIssuingDate: string;
+  passportIssuingCountry: string;
+}
+
+interface CredentialsInterface {
+  email: string;
+  password: string;
+}
+
+interface VisitInterface {
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  userId: number;
+}
+
 const app = express();
 app.use(express.json());
 const prisma = new PrismaClient();
@@ -57,13 +90,15 @@ app.post("/users", async (req: Request, res: Response) => {
     surname,
     email,
     dateOfBirth,
+    birthPlace,
     phoneNumber,
     address,
     city,
     country,
-    zipCode,
+    zip,
     passportNumber,
     passportExpirationDate,
+    passportIssuingDate,
     passportIssuingCountry,
   } = req.body;
   const user = await prisma.users.create({
@@ -72,13 +107,15 @@ app.post("/users", async (req: Request, res: Response) => {
       surname: surname,
       email: email,
       dateOfBirth: dateOfBirth,
+      birthPlace: birthPlace,
       phoneNumber: phoneNumber,
       address: address,
       city: city,
       country: country,
-      zipCode: zipCode,
+      zip: zip,
       passportNumber: passportNumber,
       passportExpirationDate: passportExpirationDate,
+      passportIssuingDate: passportIssuingDate,
       passportIssuingCountry: passportIssuingCountry,
     },
   });
@@ -107,13 +144,15 @@ app.put("/users/:id", async (req: Request, res: Response) => {
     surname,
     email,
     dateOfBirth,
+    birthPlace,
     phoneNumber,
     address,
     city,
     country,
-    zipCode,
+    zip,
     passportNumber,
     passportExpirationDate,
+    passportIssuingDate,
     passportIssuingCountry,
   } = req.body;
   const user = await prisma.users.update({
@@ -125,16 +164,18 @@ app.put("/users/:id", async (req: Request, res: Response) => {
       surname: surname,
       email: email,
       dateOfBirth: dateOfBirth,
+      birthPlace: birthPlace,
       phoneNumber: phoneNumber,
       address: address,
       city: city,
       country: country,
-      zipCode: zipCode,
+      zip: zip,
       passportNumber: passportNumber,
       passportExpirationDate: passportExpirationDate,
+      passportIssuingDate: passportIssuingDate,
       passportIssuingCountry: passportIssuingCountry,
     },
-  });
+  }) as UserInterface;
   res.json(user);
 });
 
@@ -160,7 +201,7 @@ app.post("/credentials", async (req: Request, res: Response) => {
         },
       },
     },
-  });
+  }) as CredentialsInterface;
   res.json(userCredentials);
 });
 
@@ -194,7 +235,7 @@ app.post("/visits:userId", async (req: Request, res: Response) => {
         },
       },
     },
-  });
+  }) as VisitInterface;
   res.json(visit);
 });
 
@@ -226,6 +267,8 @@ app.post(
       name,
       surname,
       email,
+      birthDate,
+      birthPlace,
       phoneNumber,
       address,
       city,
@@ -233,6 +276,7 @@ app.post(
       country,
       passportNumber,
       passportExpirationDate,
+      passportIssuingDate,
       passportIssuingCountry,
       visaType,
       visaDuration,
@@ -245,6 +289,8 @@ app.post(
         name: name,
         surname: surname,
         email: email,
+        birthDate: birthDate,
+        birthPlace: birthPlace,
         phoneNumber: phoneNumber,
         address: address,
         city: city,
@@ -252,6 +298,7 @@ app.post(
         country: country,
         passportNumber: passportNumber,
         passportExpirationDate: passportExpirationDate,
+        passportIssuingDate: passportIssuingDate,
         passportIssuingCountry: passportIssuingCountry,
         visaType: visaType,
         visaDuration: visaDuration,
