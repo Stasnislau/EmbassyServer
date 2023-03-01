@@ -17,11 +17,10 @@ export interface VisaApplicationInterface {
   passportIssuingDate: string;
   passportIssuingCountry: string;
   comments: string;
-  userId: number;
   status: string;
 }
 
-export interface residencePermitApplicationsInterface {
+export interface ResidencePermitApplicationsInterface {
   name: string;
   surname: string;
   email: string;
@@ -38,7 +37,6 @@ export interface residencePermitApplicationsInterface {
   passportIssuingDate: string;
   passportIssuingCountry: string;
   comments: string;
-  userId: number;
   status: string;
 }
 

@@ -66,6 +66,7 @@ model visaApplications {
   country                String
   passportNumber         String
   passportExpirationDate String
+  passportIssuingDate    String
   passportIssuingCountry String
   visaType               String
   visaDuration           String
