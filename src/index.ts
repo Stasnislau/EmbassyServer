@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+
 import {
   CredentialsInterface,
   ResidencePermitApplicationsInterface,
@@ -8,12 +10,20 @@ import {
 import express, { Request, Response } from "express";
 
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 
+dotenv.config();
+if (!process.env.PORT) {
+  process.exit(1);
+}
+
+const PORT: number = parseInt(process.env.PORT as string, 10);
 const app = express();
+app.use(cors());
 app.use(express.json());
 const prisma = new PrismaClient();
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("Server is running on port 3001");
 });
 
