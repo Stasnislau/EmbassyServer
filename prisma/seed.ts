@@ -81,6 +81,8 @@ async function seed() {
   );
 }
 
+seed();
+
 const getMockUsers = () => {
   const users = [
     {
