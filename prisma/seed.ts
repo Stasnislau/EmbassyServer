@@ -8,81 +8,6 @@ import {
 
 import { prisma } from "../src/utils/db.server";
 
-async function seed() {
-  await Promise.all(
-    getMockUsers().map(async (user: UserInterface) => {
-      return prisma.users.create({
-        data: {
-          ...user,
-          credentials: { create: { email: user.email, password: user.email } },
-        },
-      });
-    })
-  );
-  await Promise.all(
-    getMockVisaApplications().map(
-      async (visaApplication: VisaApplicationInterface) => {
-        return prisma.visaApplications.create({
-          data: {
-            ...visaApplication,
-            user: {
-              connect: {
-                email: visaApplication.email,
-              },
-            },
-          },
-        });
-      }
-    )
-  );
-
-  await Promise.all(
-    getMockResidencePermitApplications().map(
-      async (
-        residencePermitApplication: ResidencePermitApplicationsInterface
-      ) => {
-        return prisma.residencePermitApplications.create({
-          data: {
-            ...residencePermitApplication,
-            user: {
-              connect: {
-                email: residencePermitApplication.email,
-              },
-            },
-          },
-        });
-      }
-    )
-  );
-
-  await Promise.all(
-    getMockVisits().map(async (visit: VisitInterface) => {
-      return prisma.visits.create({
-        data: visit,
-      });
-    })
-  );
-
-  await Promise.all(
-    getMockCredentials().map(async (credential: CredentialsInterface) => {
-      const { email, password } = credential;
-      return prisma.credentials.create({
-        data: {
-          email: email,
-          password: password,
-          user: {
-            connect: {
-              email: email,
-            },
-          },
-        },
-      });
-    })
-  );
-}
-
-seed();
-
 const getMockUsers = () => {
   const users = [
     {
@@ -227,3 +152,76 @@ const getMockCredentials = () => {
   ];
   return credentials;
 };
+
+async function seed() {
+  await Promise.all(
+    getMockUsers().map(async (user: UserInterface) => {
+      return prisma.users.create({
+        data: {
+          ...user,
+        },
+      });
+    })
+  );
+  await Promise.all(
+    getMockCredentials().map(async (credential: CredentialsInterface) => {
+      const { email, password } = credential;
+      return prisma.credentials.create({
+        data: {
+          password: password,
+          user: {
+            connect: {
+              email: email,
+            },
+          },
+        },
+      });
+    })
+  );
+
+  await Promise.all(
+    getMockVisaApplications().map(
+      async (visaApplication: VisaApplicationInterface) => {
+        return prisma.visaApplications.create({
+          data: {
+            ...visaApplication,
+            user: {
+              connect: {
+                email: visaApplication.email,
+              },
+            },
+          },
+        });
+      }
+    )
+  );
+
+  await Promise.all(
+    getMockResidencePermitApplications().map(
+      async (
+        residencePermitApplication: ResidencePermitApplicationsInterface
+      ) => {
+        return prisma.residencePermitApplications.create({
+          data: {
+            ...residencePermitApplication,
+            user: {
+              connect: {
+                email: residencePermitApplication.email,
+              },
+            },
+          },
+        });
+      }
+    )
+  );
+
+  await Promise.all(
+    getMockVisits().map(async (visit: VisitInterface) => {
+      return prisma.visits.create({
+        data: visit,
+      });
+    })
+  );
+}
+
+seed();
