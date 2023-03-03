@@ -12,6 +12,7 @@ import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import { userRouter } from "./User/user.router";
+import { visitRouter } from "./Visit/visit.router";
 
 dotenv.config();
 if (!process.env.PORT) {
@@ -29,6 +30,7 @@ app.listen(PORT, () => {
 });
 
 app.use("/users", userRouter);
+app.use("/visits", visitRouter);
 
 app.get("/credentials:email", async (req: Request, res: Response) => {
   const email = req.params.email;
@@ -71,44 +73,6 @@ app.put("/credentials/:id", async (req: Request, res: Response) => {
   res.json(userCredentials);
 });
 
-app.post("/visits:userId", async (req: Request, res: Response) => {
-  const userId = req.params.userId;
-  const { date, time, location, description } = req.body;
-  const visit = (await prisma.visits.create({
-    data: {
-      date: date,
-      time: time,
-      location: location,
-      description: description,
-      user: {
-        connect: {
-          id: Number(userId),
-        },
-      },
-    },
-  })) as VisitInterface;
-  res.json(visit);
-});
-
-app.get("/visits:userId", async (req: Request, res: Response) => {
-  const userId = req.params.userId;
-  const visits = await prisma.visits.findMany({
-    where: {
-      userId: Number(userId),
-    },
-  });
-  res.json(visits);
-});
-
-app.get("/visits/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const visit = await prisma.visits.findUnique({
-    where: {
-      id: Number(id),
-    },
-  });
-  res.json(visit);
-});
 
 app.post("/visa-applications:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
