@@ -12,6 +12,7 @@ import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import { userRouter } from "./User/user.router";
+import { visaApplicationRouter } from "./VisaApplication/visaApplication.router";
 import { visitRouter } from "./Visit/visit.router";
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.listen(PORT, () => {
 
 app.use("/users", userRouter);
 app.use("/visits", visitRouter);
+app.use("/visa-applications", visaApplicationRouter);
 
 app.get("/credentials:email", async (req: Request, res: Response) => {
   const email = req.params.email;
@@ -73,62 +75,7 @@ app.put("/credentials/:id", async (req: Request, res: Response) => {
   res.json(userCredentials);
 });
 
-
-app.post("/visa-applications:userId", async (req: Request, res: Response) => {
-  const userId = req.params.userId;
-  const {
-    name,
-    surname,
-    email,
-    birthDate,
-    birthPlace,
-    phoneNumber,
-    address,
-    city,
-    zip,
-    country,
-    passportNumber,
-    passportExpirationDate,
-    passportIssuingDate,
-    passportIssuingCountry,
-    visaType,
-    visaDuration,
-    visaDate,
-    comments,
-    status,
-  } = req.body as VisaApplicationInterface;
-  const visaApplication = await prisma.visaApplications.create({
-    data: {
-      name: name,
-      surname: surname,
-      email: email,
-      birthDate: birthDate,
-      birthPlace: birthPlace,
-      phoneNumber: phoneNumber,
-      address: address,
-      city: city,
-      zip: zip,
-      country: country,
-      passportNumber: passportNumber,
-      passportExpirationDate: passportExpirationDate,
-      passportIssuingDate: passportIssuingDate,
-      passportIssuingCountry: passportIssuingCountry,
-      visaType: visaType,
-      visaDuration: visaDuration,
-      visaDate: visaDate,
-      comments: comments,
-      status: status,
-      user: {
-        connect: {
-          id: Number(userId),
-        },
-      },
-    },
-  });
-  res.json(visaApplication);
-});
-
-app.get("/visa-applications:accountId", async (req: Request, res: Response) => {
+app.get("/visa-applications/users/:accountId", async (req: Request, res: Response) => {
   const accountId = req.params.accountId;
   const visaApplications = await prisma.visaApplications.findMany({
     where: {

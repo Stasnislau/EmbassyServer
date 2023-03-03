@@ -1,4 +1,3 @@
-import { Express } from "express";
 import { VisitInterface } from "../Interfaces";
 import { embassyDB } from "../utils/db.server";
 

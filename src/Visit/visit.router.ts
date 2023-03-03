@@ -11,7 +11,7 @@ visitRouter.get("/visits/:id", async (req: Request, res: Response) => {
   res.json(visit);
 });
 
-visitRouter.get("/visits/user/:userId", async (req: Request, res: Response) => {
+visitRouter.get("/visits/users/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const visits = await visitService.getVisitsByUserId(Number(userId));
   res.json(visits);
