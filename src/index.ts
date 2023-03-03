@@ -11,6 +11,7 @@ import express, { Request, Response } from "express";
 
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
+import { userRouter } from "./User/user.router";
 
 dotenv.config();
 if (!process.env.PORT) {
@@ -27,96 +28,7 @@ app.listen(PORT, () => {
   console.log("Server is running on port 3001");
 });
 
-app.post("/users", async (req: Request, res: Response) => {
-  const {
-    name,
-    surname,
-    email,
-    dateOfBirth,
-    birthPlace,
-    phoneNumber,
-    address,
-    city,
-    country,
-    zip,
-    passportNumber,
-    passportExpirationDate,
-    passportIssuingDate,
-    passportIssuingCountry,
-  } = req.body;
-  const user = await prisma.users.create({
-    data: {
-      name: name,
-      surname: surname,
-      email: email,
-      dateOfBirth: dateOfBirth,
-      birthPlace: birthPlace,
-      phoneNumber: phoneNumber,
-      address: address,
-      city: city,
-      country: country,
-      zip: zip,
-      passportNumber: passportNumber,
-      passportExpirationDate: passportExpirationDate,
-      passportIssuingDate: passportIssuingDate,
-      passportIssuingCountry: passportIssuingCountry,
-    },
-  });
-  res.json(user);
-});
-
-
-app.get("/users/:id", async (req: Request, res: Response) => { // vrode sdelal 
-  const { id } = req.params;
-  const user = await prisma.users.findUnique({
-    where: {
-      id: Number(id),
-    },
-  });
-  res.json(user);
-});
-
-app.put("/users/:id", async (req: Request, res: Response) => {  
-  const { id } = req.params;
-  const {
-    name,
-    surname,
-    email,
-    dateOfBirth,
-    birthPlace,
-    phoneNumber,
-    address,
-    city,
-    country,
-    zip,
-    passportNumber,
-    passportExpirationDate,
-    passportIssuingDate,
-    passportIssuingCountry,
-  } = req.body;
-  const user = (await prisma.users.update({
-    where: {
-      id: Number(id),
-    },
-    data: {
-      name: name,
-      surname: surname,
-      email: email,
-      dateOfBirth: dateOfBirth,
-      birthPlace: birthPlace,
-      phoneNumber: phoneNumber,
-      address: address,
-      city: city,
-      country: country,
-      zip: zip,
-      passportNumber: passportNumber,
-      passportExpirationDate: passportExpirationDate,
-      passportIssuingDate: passportIssuingDate,
-      passportIssuingCountry: passportIssuingCountry,
-    },
-  })) as UserInterface;
-  res.json(user);
-});
+app.use("/users", userRouter);
 
 app.get("/credentials:email", async (req: Request, res: Response) => {
   const email = req.params.email;

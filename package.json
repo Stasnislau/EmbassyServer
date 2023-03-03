@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Stasnislau/EmbassyServer#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@types/node": "^18.14.0",
     "esbuild": "^0.17.10",
     "esbuild-register": "^3.4.2",

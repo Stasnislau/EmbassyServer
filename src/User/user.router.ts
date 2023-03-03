@@ -19,24 +19,23 @@ userRouter.post("/users", async (req: Request, res: Response) => {
   try {
     const user = await userService.createUser(req.body);
     res.json(user);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).send(error.message);
   }
 });
 
 userRouter.put("/users/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
-  const user = await userService.updateUser(Number(id), req.body);
+
   const Errors = validationResult(req);
+
   if (!Errors.isEmpty()) {
     return res.status(400).json({ errors: Errors.array() });
   }
   try {
     const user = await userService.updateUser(Number(id), req.body);
-    res.json(user);
-  } catch (error) {
+    return res.status(200).json(user);
+  } catch (error: any) {
     res.status(400).send(error.message);
-  }
-
-  res.json(user);
+  } 
 });

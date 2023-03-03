@@ -56,10 +56,10 @@ export const createUser = async (
   });
 };
 
-export const updateUser = async ( 
+export const updateUser = async (
   id: number,
   user: UserInterface
-): Promise<UserInterface | null > => {
+): Promise<UserInterface> => {
   return await embassyDB.users.update({
     where: {
       id: Number(id),
@@ -82,4 +82,3 @@ export const updateUser = async (
     },
   });
 };
-
