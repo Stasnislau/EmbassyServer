@@ -2,8 +2,11 @@ import { Express } from "express";
 import { UserInterface } from "../Interfaces";
 import { embassyDB } from "../utils/db.server";
 
-export const listUsers = async (): Promise<UserInterface[]> => {
-  return await embassyDB.users.findMany({
+export const getUserById = async (id: number): Promise<UserInterface> => {
+  const user = await embassyDB.users.findUnique({
+    where: {
+      id: Number(id),
+    },
     select: {
       id: true,
       name: true,
@@ -22,4 +25,61 @@ export const listUsers = async (): Promise<UserInterface[]> => {
       passportIssuingCountry: true,
     },
   });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
 };
+
+export const createUser = async (
+  user: UserInterface
+): Promise<UserInterface> => {
+  return await embassyDB.users.create({
+    data: {
+      name: user.name,
+      surname: user.surname,
+      email: user.email,
+      dateOfBirth: user.dateOfBirth,
+      birthPlace: user.birthPlace,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      city: user.city,
+      country: user.country,
+      zip: user.zip,
+      passportNumber: user.passportNumber,
+      passportExpirationDate: user.passportExpirationDate,
+      passportIssuingDate: user.passportIssuingDate,
+      passportIssuingCountry: user.passportIssuingCountry,
+    },
+  });
+};
+
+export const updateUser = async ( 
+  id: number,
+  user: UserInterface
+): Promise<UserInterface | null > => {
+  return await embassyDB.users.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      name: user.name,
+      surname: user.surname,
+      email: user.email,
+      dateOfBirth: user.dateOfBirth,
+      birthPlace: user.birthPlace,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      city: user.city,
+      country: user.country,
+      zip: user.zip,
+      passportNumber: user.passportNumber,
+      passportExpirationDate: user.passportExpirationDate,
+      passportIssuingDate: user.passportIssuingDate,
+      passportIssuingCountry: user.passportIssuingCountry,
+    },
+  });
+};
+

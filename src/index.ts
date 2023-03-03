@@ -65,12 +65,8 @@ app.post("/users", async (req: Request, res: Response) => {
   res.json(user);
 });
 
-app.get("/users", async (req: Request, res: Response) => {
-  const users = await prisma.users.findMany();
-  res.json(users);
-});
 
-app.get("/users/:id", async (req: Request, res: Response) => {
+app.get("/users/:id", async (req: Request, res: Response) => { // vrode sdelal 
   const { id } = req.params;
   const user = await prisma.users.findUnique({
     where: {
@@ -80,7 +76,7 @@ app.get("/users/:id", async (req: Request, res: Response) => {
   res.json(user);
 });
 
-app.put("/users/:id", async (req: Request, res: Response) => {
+app.put("/users/:id", async (req: Request, res: Response) => {  
   const { id } = req.params;
   const {
     name,
